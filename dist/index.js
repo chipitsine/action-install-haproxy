@@ -1492,7 +1492,7 @@ function run() {
             }
             if (stringToBool_1.default(core.getInput('use_openssl'))) {
                 yield core.group(`Install 'use_openssl' build dependencies.`, () => __awaiter(this, void 0, void 0, function* () {
-                    yield exec_1.exec('sudo', ['apt-get', 'install', '-y', 'libssl-dev']);
+                    yield exec_1.exec('sudo', ['apt-get', 'install', '-y', 'libssl-dev asan6']);
                 }));
                 OPTIONS.push('USE_OPENSSL=1');
             }
@@ -1502,7 +1502,7 @@ function run() {
                     'xv',
                     '--strip-components=1'
                 ]);
-                yield exec_1.exec('make', ['-C', extracted, 'TARGET=linux-glibc'].concat(OPTIONS));
+                yield exec_1.exec('make', ['-C', extracted, 'TARGET=linux-glibc DEBUG_CFLAGS="-g -fsanitize=address" LDFLAGS="-lasan"'].concat(OPTIONS));
                 return extracted;
             }));
             core.addPath(haproxy_path);
